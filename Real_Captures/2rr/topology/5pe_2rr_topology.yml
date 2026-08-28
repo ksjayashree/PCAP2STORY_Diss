@@ -1,0 +1,135 @@
+name: pcap2story
+
+topology:
+  nodes:
+    rr1:
+      kind: linux
+      image: quay.io/frrouting/frr:10.6.1
+      binds:
+        - configs/rr1/frr.conf:/etc/frr/frr.conf
+        - configs/rr1/daemons:/etc/frr/daemons
+        - configs/rr1/vtysh.conf:/etc/frr/vtysh.conf
+        - node_setup.sh:/etc/frr/node_setup.sh
+        - start_no_watchfrr.sh:/etc/frr/start_no_watchfrr.sh
+      cmd: bash /etc/frr/start_no_watchfrr.sh
+      exec:
+        - sysctl -w net.ipv4.ip_forward=1
+        - sysctl -w net.ipv6.conf.all.forwarding=1
+        - sysctl -w net.ipv6.conf.all.disable_ipv6=0
+        - bash /etc/frr/node_setup.sh
+
+    rr2:
+      kind: linux
+      image: quay.io/frrouting/frr:10.6.1
+      binds:
+        - configs/rr2/frr.conf:/etc/frr/frr.conf
+        - configs/rr2/daemons:/etc/frr/daemons
+        - configs/rr2/vtysh.conf:/etc/frr/vtysh.conf
+        - node_setup.sh:/etc/frr/node_setup.sh
+        - start_no_watchfrr.sh:/etc/frr/start_no_watchfrr.sh
+      cmd: bash /etc/frr/start_no_watchfrr.sh
+      exec:
+        - sysctl -w net.ipv4.ip_forward=1
+        - sysctl -w net.ipv6.conf.all.forwarding=1
+        - sysctl -w net.ipv6.conf.all.disable_ipv6=0
+        - bash /etc/frr/node_setup.sh
+
+    pe1:
+      kind: linux
+      image: quay.io/frrouting/frr:10.6.1
+      binds:
+        - configs/pe1/frr.conf:/etc/frr/frr.conf
+        - configs/pe1/daemons:/etc/frr/daemons
+        - configs/pe1/vtysh.conf:/etc/frr/vtysh.conf
+        - node_setup.sh:/etc/frr/node_setup.sh
+        - start_no_watchfrr.sh:/etc/frr/start_no_watchfrr.sh
+      cmd: bash /etc/frr/start_no_watchfrr.sh
+      exec:
+        - sysctl -w net.ipv4.ip_forward=1
+        - sysctl -w net.ipv6.conf.all.forwarding=1
+        - sysctl -w net.ipv6.conf.all.disable_ipv6=0
+        - bash /etc/frr/node_setup.sh
+
+    pe2:
+      kind: linux
+      image: quay.io/frrouting/frr:10.6.1
+      binds:
+        - configs/pe2/frr.conf:/etc/frr/frr.conf
+        - configs/pe2/daemons:/etc/frr/daemons
+        - configs/pe2/vtysh.conf:/etc/frr/vtysh.conf
+        - node_setup.sh:/etc/frr/node_setup.sh
+        - start_no_watchfrr.sh:/etc/frr/start_no_watchfrr.sh
+      cmd: bash /etc/frr/start_no_watchfrr.sh
+      exec:
+        - sysctl -w net.ipv4.ip_forward=1
+        - sysctl -w net.ipv6.conf.all.forwarding=1
+        - sysctl -w net.ipv6.conf.all.disable_ipv6=0
+        - bash /etc/frr/node_setup.sh
+
+    pe3:
+      kind: linux
+      image: quay.io/frrouting/frr:10.6.1
+      binds:
+        - configs/pe3/frr.conf:/etc/frr/frr.conf
+        - configs/pe3/daemons:/etc/frr/daemons
+        - configs/pe3/vtysh.conf:/etc/frr/vtysh.conf
+        - node_setup.sh:/etc/frr/node_setup.sh
+        - start_no_watchfrr.sh:/etc/frr/start_no_watchfrr.sh
+      cmd: bash /etc/frr/start_no_watchfrr.sh
+      exec:
+        - sysctl -w net.ipv4.ip_forward=1
+        - sysctl -w net.ipv6.conf.all.forwarding=1
+        - sysctl -w net.ipv6.conf.all.disable_ipv6=0
+        - bash /etc/frr/node_setup.sh
+
+    pe4:
+      kind: linux
+      image: quay.io/frrouting/frr:10.6.1
+      binds:
+        - configs/pe4/frr.conf:/etc/frr/frr.conf
+        - configs/pe4/daemons:/etc/frr/daemons
+        - configs/pe4/vtysh.conf:/etc/frr/vtysh.conf
+        - node_setup.sh:/etc/frr/node_setup.sh
+        - start_no_watchfrr.sh:/etc/frr/start_no_watchfrr.sh
+      cmd: bash /etc/frr/start_no_watchfrr.sh
+      exec:
+        - sysctl -w net.ipv4.ip_forward=1
+        - sysctl -w net.ipv6.conf.all.forwarding=1
+        - sysctl -w net.ipv6.conf.all.disable_ipv6=0
+        - bash /etc/frr/node_setup.sh
+
+    pe5:
+      kind: linux
+      image: quay.io/frrouting/frr:10.6.1
+      binds:
+        - configs/pe5/frr.conf:/etc/frr/frr.conf
+        - configs/pe5/daemons:/etc/frr/daemons
+        - configs/pe5/vtysh.conf:/etc/frr/vtysh.conf
+        - node_setup.sh:/etc/frr/node_setup.sh
+        - start_no_watchfrr.sh:/etc/frr/start_no_watchfrr.sh
+      cmd: bash /etc/frr/start_no_watchfrr.sh
+      exec:
+        - sysctl -w net.ipv4.ip_forward=1
+        - sysctl -w net.ipv6.conf.all.forwarding=1
+        - sysctl -w net.ipv6.conf.all.disable_ipv6=0
+        - bash /etc/frr/node_setup.sh
+
+    pe1-bond-stub:
+      kind: linux
+      image: quay.io/frrouting/frr:10.6.1
+      cmd: sleep infinity
+
+    pe2-bond-stub:
+      kind: linux
+      image: quay.io/frrouting/frr:10.6.1
+      cmd: sleep infinity
+
+  links:
+    - endpoints: ["rr1:eth1", "rr2:eth1"]
+    - endpoints: ["pe1:eth1", "rr1:eth2"]
+    - endpoints: ["pe2:eth1", "rr1:eth3"]
+    - endpoints: ["pe3:eth1", "rr1:eth4"]
+    - endpoints: ["pe4:eth2", "rr2:eth5"]
+    - endpoints: ["pe5:eth2", "rr2:eth6"]
+    - endpoints: ["pe1:eth2", "pe1-bond-stub:eth1"]
+    - endpoints: ["pe2:eth2", "pe2-bond-stub:eth1"]

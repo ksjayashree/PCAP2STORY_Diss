@@ -1,0 +1,8 @@
+{
+  "fault_type": "PE Cease",
+  "event_affected_node": "PE1",
+  "trigger_mechanism": "Cease/Administrative Shutdown",
+  "time_of_first_fault": "2026-07-31T17:30:12.133583Z",
+  "recovered": true,
+  "time_of_recovery": "2026-07-31T17:30:22.857687Z"
+}

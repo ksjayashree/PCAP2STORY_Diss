@@ -1,0 +1,92 @@
+name: pcap2story-3rr-trunctest
+
+topology:
+  nodes:
+    xrr1:
+      kind: linux
+      image: quay.io/frrouting/frr:10.6.1
+      binds:
+        - configs/xrr1/frr.conf:/etc/frr/frr.conf
+        - configs/xrr1/daemons:/etc/frr/daemons
+        - configs/xrr1/vtysh.conf:/etc/frr/vtysh.conf
+        - node_setup.sh:/etc/frr/node_setup.sh
+        - start_no_watchfrr.sh:/etc/frr/start_no_watchfrr.sh
+      cmd: bash /etc/frr/start_no_watchfrr.sh
+      exec:
+        - sysctl -w net.ipv4.ip_forward=1
+        - sysctl -w net.ipv6.conf.all.forwarding=1
+        - sysctl -w net.ipv6.conf.all.disable_ipv6=0
+        - bash /etc/frr/node_setup.sh
+
+    xpe1:
+      kind: linux
+      image: quay.io/frrouting/frr:10.6.1
+      binds:
+        - configs/xpe1/frr.conf:/etc/frr/frr.conf
+        - configs/xpe1/daemons:/etc/frr/daemons
+        - configs/xpe1/vtysh.conf:/etc/frr/vtysh.conf
+        - node_setup.sh:/etc/frr/node_setup.sh
+        - start_no_watchfrr.sh:/etc/frr/start_no_watchfrr.sh
+      cmd: bash /etc/frr/start_no_watchfrr.sh
+      exec:
+        - sysctl -w net.ipv4.ip_forward=1
+        - sysctl -w net.ipv6.conf.all.forwarding=1
+        - sysctl -w net.ipv6.conf.all.disable_ipv6=0
+        - bash /etc/frr/node_setup.sh
+
+    xpe2:
+      kind: linux
+      image: quay.io/frrouting/frr:10.6.1
+      binds:
+        - configs/xpe2/frr.conf:/etc/frr/frr.conf
+        - configs/xpe2/daemons:/etc/frr/daemons
+        - configs/xpe2/vtysh.conf:/etc/frr/vtysh.conf
+        - node_setup.sh:/etc/frr/node_setup.sh
+        - start_no_watchfrr.sh:/etc/frr/start_no_watchfrr.sh
+      cmd: bash /etc/frr/start_no_watchfrr.sh
+      exec:
+        - sysctl -w net.ipv4.ip_forward=1
+        - sysctl -w net.ipv6.conf.all.forwarding=1
+        - sysctl -w net.ipv6.conf.all.disable_ipv6=0
+        - bash /etc/frr/node_setup.sh
+
+    xpe3:
+      kind: linux
+      image: quay.io/frrouting/frr:10.6.1
+      binds:
+        - configs/xpe3/frr.conf:/etc/frr/frr.conf
+        - configs/xpe3/daemons:/etc/frr/daemons
+        - configs/xpe3/vtysh.conf:/etc/frr/vtysh.conf
+        - node_setup.sh:/etc/frr/node_setup.sh
+        - start_no_watchfrr.sh:/etc/frr/start_no_watchfrr.sh
+      cmd: bash /etc/frr/start_no_watchfrr.sh
+      exec:
+        - sysctl -w net.ipv4.ip_forward=1
+        - sysctl -w net.ipv6.conf.all.forwarding=1
+        - sysctl -w net.ipv6.conf.all.disable_ipv6=0
+        - bash /etc/frr/node_setup.sh
+
+    xpe4:
+      kind: linux
+      image: quay.io/frrouting/frr:10.6.1
+      binds:
+        - configs/xpe4/frr.conf:/etc/frr/frr.conf
+        - configs/xpe4/daemons:/etc/frr/daemons
+        - configs/xpe4/vtysh.conf:/etc/frr/vtysh.conf
+        - node_setup.sh:/etc/frr/node_setup.sh
+        - start_no_watchfrr.sh:/etc/frr/start_no_watchfrr.sh
+      cmd: bash /etc/frr/start_no_watchfrr.sh
+      exec:
+        - sysctl -w net.ipv4.ip_forward=1
+        - sysctl -w net.ipv6.conf.all.forwarding=1
+        - sysctl -w net.ipv6.conf.all.disable_ipv6=0
+        - bash /etc/frr/node_setup.sh
+
+  links:
+    # xrr1 domain only: xpe1, xpe2, xpe3, xpe4 -- same subset that always
+    # succeeds first in every full-13-node deploy attempt so far. No RR mesh
+    # links since xrr2/xrr3 are excluded from this truncated test.
+    - endpoints: ["xpe1:eth1", "xrr1:eth2"]
+    - endpoints: ["xpe2:eth1", "xrr1:eth3"]
+    - endpoints: ["xpe3:eth1", "xrr1:eth4"]
+    - endpoints: ["xpe4:eth1", "xrr1:eth5"]

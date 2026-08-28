@@ -1,0 +1,68 @@
+{
+  "topology_id": "pilot_3rr_10pe",
+  "as_number": 65000,
+  "evpn": {
+    "vni": 100
+  },
+  "nodes": [
+    {"id": "XPE1", "role": "PE", "router_id": "10.0.0.11"},
+    {"id": "XPE2", "role": "PE", "router_id": "10.0.0.12"},
+    {"id": "XPE3", "role": "PE", "router_id": "10.0.0.13"},
+    {"id": "XPE4", "role": "PE", "router_id": "10.0.0.14"},
+    {"id": "XPE5", "role": "PE", "router_id": "10.0.0.15"},
+    {"id": "XPE6", "role": "PE", "router_id": "10.0.0.16"},
+    {"id": "XPE7", "role": "PE", "router_id": "10.0.0.17"},
+    {"id": "XPE8", "role": "PE", "router_id": "10.0.0.18"},
+    {"id": "XPE9", "role": "PE", "router_id": "10.0.0.19"},
+    {"id": "XPE10", "role": "PE", "router_id": "10.0.0.20"},
+    {"id": "XRR1", "role": "RR", "router_id": "10.0.0.1"},
+    {"id": "XRR2", "role": "RR", "router_id": "10.0.0.2"},
+    {"id": "XRR3", "role": "RR", "router_id": "10.0.0.3"}
+  ],
+  "links": [
+    {"a": "XPE1", "b": "XRR1"},
+    {"a": "XPE2", "b": "XRR1"},
+    {"a": "XPE3", "b": "XRR1"},
+    {"a": "XPE4", "b": "XRR1"},
+    {"a": "XPE5", "b": "XRR2"},
+    {"a": "XPE6", "b": "XRR2"},
+    {"a": "XPE7", "b": "XRR2"},
+    {"a": "XPE8", "b": "XRR3"},
+    {"a": "XPE9", "b": "XRR3"},
+    {"a": "XPE10", "b": "XRR3"},
+    {"a": "XRR1", "b": "XRR2"},
+    {"a": "XRR1", "b": "XRR3"},
+    {"a": "XRR2", "b": "XRR3"}
+  ],
+
+  "vantages": ["XRR1", "XRR2", "XRR3"],
+
+  "visibility": {
+    "XRR1": {
+      "direct_peers": ["XPE1", "XPE2", "XPE3", "XPE4", "XRR2", "XRR3"],
+      "reflects_routes_from": ["XRR2", "XRR3"]
+    },
+    "XRR2": {
+      "direct_peers": ["XPE5", "XPE6", "XPE7", "XRR1", "XRR3"],
+      "reflects_routes_from": ["XRR1", "XRR3"]
+    },
+    "XRR3": {
+      "direct_peers": ["XPE8", "XPE9", "XPE10", "XRR1", "XRR2"],
+      "reflects_routes_from": ["XRR1", "XRR2"]
+    }
+  },
+
+  "_ground_truth_comment": "RT=100:1 uniform across all PEs (confirmed live, same pattern as 5PE/2RR). RD = <router-id>:2 (FRR auto-derivation, confirmed live). ESI: xpe3/xpe4 share es-id 34 (03:02:00:00:00:34:34:00:00:22), xpe6/xpe7 share es-id 67 (03:02:00:00:00:67:67:00:00:43), confirmed live via 'show evpn es'. xpe1/xpe2/xpe5/xpe8/xpe9/xpe10 have no ESI.",
+  "ground_truth": {
+    "XPE1": {"expected_rt": "100:1", "expected_rd": "10.0.0.11:2", "esi": null},
+    "XPE2": {"expected_rt": "100:1", "expected_rd": "10.0.0.12:2", "esi": null},
+    "XPE3": {"expected_rt": "100:1", "expected_rd": "10.0.0.13:2", "esi": "03:02:00:00:00:34:34:00:00:22"},
+    "XPE4": {"expected_rt": "100:1", "expected_rd": "10.0.0.14:2", "esi": "03:02:00:00:00:34:34:00:00:22"},
+    "XPE5": {"expected_rt": "100:1", "expected_rd": "10.0.0.15:2", "esi": null},
+    "XPE6": {"expected_rt": "100:1", "expected_rd": "10.0.0.16:2", "esi": "03:02:00:00:00:67:67:00:00:43"},
+    "XPE7": {"expected_rt": "100:1", "expected_rd": "10.0.0.17:2", "esi": "03:02:00:00:00:67:67:00:00:43"},
+    "XPE8": {"expected_rt": "100:1", "expected_rd": "10.0.0.18:2", "esi": null},
+    "XPE9": {"expected_rt": "100:1", "expected_rd": "10.0.0.19:2", "esi": null},
+    "XPE10": {"expected_rt": "100:1", "expected_rd": "10.0.0.20:2", "esi": null}
+  }
+}

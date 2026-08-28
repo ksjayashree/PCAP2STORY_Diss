@@ -1,0 +1,53 @@
+# Default topology for synthetic EVPN/BGP pcap generation
+# Designed to produce production-realistic training data for ML fault detection
+
+as_number: 65001
+
+timing:
+  hold_timer: 30
+  keepalive_timer: 10
+  connect_retry: 30
+  min_route_adv_interval: 0
+
+evpn:
+  vni: 100
+  route_target: "65001:100"
+  mac_pool_size: 50
+  ip_prefix_pool: "192.168.0.0/16"
+  srv6_locator_prefix: "2001:db8:ffff::/48"
+
+capture_vantage: RR1
+
+route_reflectors:
+  - id: RR1
+    loopback: "2001:db8::1:1"
+    bgp_id: "10.0.0.1"
+    peers: [PE1, PE2, PE3, RR2]
+  - id: RR2
+    loopback: "2001:db8::1:2"
+    bgp_id: "10.0.0.2"
+    peers: [PE4, PE5, RR1]
+
+pe_nodes:
+  - id: PE1
+    loopback: "2001:db8::2:1"
+    bgp_id: "10.0.0.11"
+    esi: "00:11:22:33:44:55:66:77:88:01"
+    peers: [RR1]
+  - id: PE2
+    loopback: "2001:db8::2:2"
+    bgp_id: "10.0.0.12"
+    esi: "00:11:22:33:44:55:66:77:88:01"
+    peers: [RR1]
+  - id: PE3
+    loopback: "2001:db8::2:3"
+    bgp_id: "10.0.0.13"
+    peers: [RR1]
+  - id: PE4
+    loopback: "2001:db8::2:4"
+    bgp_id: "10.0.0.14"
+    peers: [RR2]
+  - id: PE5
+    loopback: "2001:db8::2:5"
+    bgp_id: "10.0.0.15"
+    peers: [RR2]

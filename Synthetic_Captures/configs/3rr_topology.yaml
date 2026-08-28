@@ -1,0 +1,85 @@
+# 3RR/10PE topology for synthetic EVPN/BGP pcap generation.
+# Mirrors the real pilot_containerlab 3rr project's structure (confirmed
+# directly against that project's own topology.json, not assumed): a
+# 4-3-3 PE-to-RR split (PE1-4->RR1, PE5-7->RR2, PE8-10->RR3), full RR
+# mesh, and two ESI pairs (PE3/PE4, PE6/PE7) -- not an even 3-4-3 guess.
+# Uses synthcap's OWN existing naming/addressing convention (AS 65001,
+# RT 65001:100, PE1-10/RR1-3), not the real 3rr project's XPE/XRR naming
+# -- these are separate projects with separate established conventions.
+
+as_number: 65001
+
+timing:
+  hold_timer: 30
+  keepalive_timer: 10
+  connect_retry: 30
+  min_route_adv_interval: 0
+
+evpn:
+  vni: 100
+  route_target: "65001:100"
+  mac_pool_size: 50
+  ip_prefix_pool: "192.168.0.0/16"
+  srv6_locator_prefix: "2001:db8:ffff::/48"
+
+capture_vantage: RR1
+
+route_reflectors:
+  - id: RR1
+    loopback: "2001:db8::1:1"
+    bgp_id: "10.0.0.1"
+    peers: [PE1, PE2, PE3, PE4, RR2, RR3]
+  - id: RR2
+    loopback: "2001:db8::1:2"
+    bgp_id: "10.0.0.2"
+    peers: [PE5, PE6, PE7, RR1, RR3]
+  - id: RR3
+    loopback: "2001:db8::1:3"
+    bgp_id: "10.0.0.3"
+    peers: [PE8, PE9, PE10, RR1, RR2]
+
+pe_nodes:
+  - id: PE1
+    loopback: "2001:db8::2:1"
+    bgp_id: "10.0.0.11"
+    peers: [RR1]
+  - id: PE2
+    loopback: "2001:db8::2:2"
+    bgp_id: "10.0.0.12"
+    peers: [RR1]
+  - id: PE3
+    loopback: "2001:db8::2:3"
+    bgp_id: "10.0.0.13"
+    esi: "00:11:22:33:44:55:66:77:88:02"
+    peers: [RR1]
+  - id: PE4
+    loopback: "2001:db8::2:4"
+    bgp_id: "10.0.0.14"
+    esi: "00:11:22:33:44:55:66:77:88:02"
+    peers: [RR1]
+  - id: PE5
+    loopback: "2001:db8::2:5"
+    bgp_id: "10.0.0.15"
+    peers: [RR2]
+  - id: PE6
+    loopback: "2001:db8::2:6"
+    bgp_id: "10.0.0.16"
+    esi: "00:11:22:33:44:55:66:77:88:03"
+    peers: [RR2]
+  - id: PE7
+    loopback: "2001:db8::2:7"
+    bgp_id: "10.0.0.17"
+    esi: "00:11:22:33:44:55:66:77:88:03"
+    peers: [RR2]
+  - id: PE8
+    loopback: "2001:db8::2:8"
+    bgp_id: "10.0.0.18"
+    peers: [RR3]
+  - id: PE9
+    loopback: "2001:db8::2:9"
+    bgp_id: "10.0.0.19"
+    peers: [RR3]
+  - id: PE10
+    loopback: "2001:db8::2:10"
+    bgp_id: "10.0.0.20"
+    peers: [RR3]

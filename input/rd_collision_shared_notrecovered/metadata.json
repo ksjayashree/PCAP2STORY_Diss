@@ -1,0 +1,17 @@
+{
+  "fault_type": "RD Collision",
+  "fault_subtype": "RD Collision",
+  "event_affected_nodes": [
+    "PE3",
+    "PE4"
+  ],
+  "trigger_mechanism": "Shared Route Distinguisher (RD Collision)",
+  "colliding_rd": "65000:999",
+  "original_rd": {
+    "pe3": "10.0.0.13:2",
+    "pe4": "10.0.0.14:2"
+  },
+  "time_of_first_fault": "2026-07-31T11:01:21.787021Z",
+  "recovered": false,
+  "time_of_recovery": null
+}

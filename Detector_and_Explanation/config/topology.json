@@ -1,0 +1,48 @@
+{
+  "topology_id": "pilot_5pe_2rr_asymmetric",
+  "as_number": 65000,
+  "evpn": {
+    "vni": 100
+  },
+  "nodes": [
+    {"id": "PE1", "role": "PE", "router_id": "10.0.0.11"},
+    {"id": "PE2", "role": "PE", "router_id": "10.0.0.12"},
+    {"id": "PE3", "role": "PE", "router_id": "10.0.0.13"},
+    {"id": "PE4", "role": "PE", "router_id": "10.0.0.14"},
+    {"id": "PE5", "role": "PE", "router_id": "10.0.0.15"},
+    {"id": "RR1", "role": "RR", "router_id": "10.0.0.1"},
+    {"id": "RR2", "role": "RR", "router_id": "10.0.0.2"}
+  ],
+  "links": [
+    {"a": "PE1", "b": "RR1"},
+    {"a": "PE2", "b": "RR1"},
+    {"a": "PE3", "b": "RR1"},
+    {"a": "PE4", "b": "RR2"},
+    {"a": "PE5", "b": "RR2"},
+    {"a": "RR1", "b": "RR2"}
+  ],
+
+  "_vantages_comment": "Arbitrary-length list of capture points. Adding a 3rd vantage (e.g. a PE-side tap) means appending one entry here plus one entry to 'visibility' below -- no code should special-case a count of exactly 2.",
+  "vantages": ["RR1", "RR2"],
+
+  "_visibility_comment": "Per vantage: 'direct_peers' are nodes whose point-to-point sessions (BGP TCP session, BFD, OSPF adjacency) terminate at this vantage -- only these nodes' LOCAL protocol-state changes (BFD down, OSPF neighbor loss, TCP RST) are directly observable here. 'reflects_routes_from' lists other vantages whose PE-originated BGP EVPN routes are still visible at this vantage via RR-to-RR route reflection (RFC 4456) -- i.e. BGP UPDATE/WITHDRAWAL content is visible network-wide through the RR mesh even though local link/session-state events are not. This split is what makes the RR-Down vantage-flip case fall out generically: RR2 has RR1 in its own direct_peers, so RR2 directly observes RR1's session drop as a local event -- no fault-type-specific branch needed to know RR2 can report on RR1's failure.",
+  "visibility": {
+    "RR1": {
+      "direct_peers": ["PE1", "PE2", "PE3", "RR2"],
+      "reflects_routes_from": ["RR2"]
+    },
+    "RR2": {
+      "direct_peers": ["PE4", "PE5", "RR1"],
+      "reflects_routes_from": ["RR1"]
+    }
+  },
+
+  "_ground_truth_comment": "Per-PE expected values, confirmed live via vtysh against the running fabric on 2026-07-31 (not copied from pcap2story's topology.yaml, which only has route_target and no RD/ESI fields at all). expected_rd follows FRR's live-confirmed auto-derivation pattern <bgp_router_id>:<instance>, instance=2 observed uniformly across all 5 PEs for VNI 100. esi is set only for PE1/PE2, which share an EVPN multihoming ESI on their vhost100 attachment (confirmed via 'show running-config': es-id 12, es-sys-mac 02:00:00:00:12:12, type-3 ESI 03:02:00:00:00:12:12:00:00:0c). PE3/PE4/PE5 have plain non-ES vhost100 interfaces and no ESI.",
+  "ground_truth": {
+    "PE1": {"expected_rt": "100:1", "expected_rd": "10.0.0.11:2", "esi": "03:02:00:00:00:12:12:00:00:0c"},
+    "PE2": {"expected_rt": "100:1", "expected_rd": "10.0.0.12:2", "esi": "03:02:00:00:00:12:12:00:00:0c"},
+    "PE3": {"expected_rt": "100:1", "expected_rd": "10.0.0.13:2", "esi": null},
+    "PE4": {"expected_rt": "100:1", "expected_rd": "10.0.0.14:2", "esi": null},
+    "PE5": {"expected_rt": "100:1", "expected_rd": "10.0.0.15:2", "esi": null}
+  }
+}

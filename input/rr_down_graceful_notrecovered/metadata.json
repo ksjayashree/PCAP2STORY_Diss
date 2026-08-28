@@ -1,0 +1,8 @@
+{
+  "fault_type": "RR Down",
+  "event_affected_node": "RR1",
+  "trigger_mechanism": "Cease/Administrative Shutdown",
+  "time_of_first_fault": "2026-07-31T17:27:40.694841Z",
+  "recovered": false,
+  "time_of_recovery": null
+}

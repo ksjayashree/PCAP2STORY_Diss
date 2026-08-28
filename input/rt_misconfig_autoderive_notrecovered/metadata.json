@@ -1,0 +1,10 @@
+{
+  "fault_type": "RT Misconfiguration",
+  "event_affected_node": "PE1",
+  "trigger_mechanism": "Auto-Derived Mismatch",
+  "time_of_first_fault": "2026-07-31T17:44:37.689452Z",
+  "recovered": false,
+  "time_of_recovery": null,
+  "configured_export_rt": "65000:100 (auto)",
+  "configured_import_rt": "100:1 (peer explicit import)"
+}

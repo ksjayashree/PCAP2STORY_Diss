@@ -1,0 +1,7 @@
+scapy
+numpy
+sentence-transformers
+openai
+python-dotenv
+google-genai
+bert-score
